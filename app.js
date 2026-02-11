@@ -378,13 +378,39 @@ function renderAddExpense(container, preCat = '', expenseId = null) {
 }
 
 function renderHistory(container) {
-    const records = state.expenses
+    const listHtml = (recs) => recs.length === 0 ? '<p style="text-align:center; padding: 2rem;">No records found.</p>' : recs.map(e => `
+        <div class="glass-card expense-item">
+            <div class="expense-header"><span>${e.date}</span><span style="color: var(--accent); font-weight: 700;">MYR ${parseFloat(e.amount).toFixed(2)}</span></div>
+            <div class="expense-body" style="margin-top: 10px;">
+                <h4 style="margin:0;">${e.category}</h4>
+                <div style="font-size: 0.8rem; color: var(--text-dim); display: flex; gap: 15px; margin-top: 5px;">
+                    <span>${e.odometer ? '🚗 ' + e.odometer + ' km' : ''}</span>
+                    <span>${e.warranty ? '🛡️ ' + e.warranty : ''}</span>
+                </div>
+                ${e.remarks ? `<p style="font-size: 0.85rem; font-style: italic; color: #94a3b8; margin-top: 8px;">"${e.remarks}"</p>` : ''}
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                ${e.file ? `<button class="btn-view" onclick="window.viewFile('${e.file}')" style="flex: 1;">Invoice</button>` : ''}
+                <button class="btn-edit" onclick="window.editExpense('${e.id}')" style="flex: 1; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 12px; border-radius: 8px; cursor: pointer;">Edit</button>
+                <button onclick="window.deleteExpense('${e.id}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px 12px; border-radius: 8px; cursor: pointer;">Delete</button>
+            </div>
+        </div>
+    `).join('');
+
+    const getFilteredRecords = () => state.expenses
         .filter(e => e.vehicleId === state.activeVehicleId)
         .filter(e => {
             const s = state.historySearch.toLowerCase();
             return e.category.toLowerCase().includes(s) || (e.remarks || '').toLowerCase().includes(s);
         })
         .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // If already rendered, just update list
+    if (document.getElementById('history-search')) {
+        const listContainer = container.querySelector('.expense-list');
+        if (listContainer) listContainer.innerHTML = listHtml(getFilteredRecords());
+        return;
+    }
 
     container.innerHTML = `
         <div class="history-view">
@@ -395,24 +421,7 @@ function renderHistory(container) {
                 </div>
             </div>
             <div class="expense-list">
-                ${records.length === 0 ? '<p style="text-align:center; padding: 2rem;">No records found.</p>' : records.map(e => `
-                    <div class="glass-card expense-item">
-                        <div class="expense-header"><span>${e.date}</span><span style="color: var(--accent); font-weight: 700;">MYR ${parseFloat(e.amount).toFixed(2)}</span></div>
-                        <div class="expense-body" style="margin-top: 10px;">
-                            <h4 style="margin:0;">${e.category}</h4>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); display: flex; gap: 15px; margin-top: 5px;">
-                                <span>${e.odometer ? '🚗 ' + e.odometer + ' km' : ''}</span>
-                                <span>${e.warranty ? '🛡️ ' + e.warranty : ''}</span>
-                            </div>
-                            ${e.remarks ? `<p style="font-size: 0.85rem; font-style: italic; color: #94a3b8; margin-top: 8px;">"${e.remarks}"</p>` : ''}
-                        </div>
-                        <div style="display: flex; gap: 10px; margin-top: 15px;">
-                            ${e.file ? `<button class="btn-view" onclick="window.viewFile('${e.file}')" style="flex: 1;">Invoice</button>` : ''}
-                            <button class="btn-edit" onclick="window.editExpense('${e.id}')" style="flex: 1; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 12px; border-radius: 8px; cursor: pointer;">Edit</button>
-                            <button onclick="window.deleteExpense('${e.id}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px 12px; border-radius: 8px; cursor: pointer;">Delete</button>
-                        </div>
-                    </div>
-                `).join('')}
+                ${listHtml(getFilteredRecords())}
             </div>
         </div>
     `;
@@ -424,18 +433,48 @@ function renderHistory(container) {
 }
 
 function renderInsights(container) {
-    const records = state.expenses
-        .filter(e => e.vehicleId === state.activeVehicleId)
-        .filter(e => {
-            const s = state.insightsSearch.toLowerCase();
-            return e.category.toLowerCase().includes(s) || (e.remarks || '').toLowerCase().includes(s);
-        });
+    const listHtml = (groups) => Object.keys(groups).length === 0 ? '<p style="text-align:center;">No data found matching your search.</p>' : Object.keys(groups).sort().map(cat => {
+        const list = groups[cat].sort((a, b) => new Date(b.date) - new Date(a.date));
+        return `
+            <div class="glass-card insight-card" style="margin-bottom: 15px;">
+                <h4 style="margin: 0 0 10px 0; color: var(--accent);">${cat}</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    ${list.map(e => `
+                        <div style="font-size: 0.85rem; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 10px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>${e.date}</span>
+                                <span>MYR ${parseFloat(e.amount).toFixed(2)}</span>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-dim);">${e.odometer ? e.odometer + ' km' : ''} ${e.warranty ? ' | 🛡️ ' + e.warranty : ''}</div>
+                            ${e.remarks ? `<div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px; font-style: italic;">"${e.remarks}"</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }).join('');
 
-    const groups = records.reduce((acc, e) => {
-        if (!acc[e.category]) acc[e.category] = [];
-        acc[e.category].push(e);
-        return acc;
-    }, {});
+    const getFilteredGroups = () => {
+        const records = state.expenses
+            .filter(e => e.vehicleId === state.activeVehicleId)
+            .filter(e => {
+                const s = state.insightsSearch.toLowerCase();
+                return e.category.toLowerCase().includes(s) || (e.remarks || '').toLowerCase().includes(s);
+            });
+
+        return records.reduce((acc, e) => {
+            if (!acc[e.category]) acc[e.category] = [];
+            acc[e.category].push(e);
+            return acc;
+        }, {});
+    };
+
+    // If already rendered, just update list
+    if (document.getElementById('insights-search')) {
+        const listContainer = container.querySelector('.insight-grid');
+        if (listContainer) listContainer.innerHTML = listHtml(getFilteredGroups());
+        return;
+    }
 
     container.innerHTML = `
         <div class="insights-view">
@@ -446,27 +485,7 @@ function renderInsights(container) {
                 </div>
             </div>
             <div class="insight-grid" style="margin-top: 15px;">
-                ${Object.keys(groups).sort().map(cat => {
-        const list = groups[cat].sort((a, b) => new Date(b.date) - new Date(a.date));
-        return `
-                        <div class="glass-card insight-card" style="margin-bottom: 15px;">
-                            <h4 style="margin: 0 0 10px 0; color: var(--accent);">${cat}</h4>
-                            <div style="display: flex; flex-direction: column; gap: 10px;">
-                                ${list.map(e => `
-                                    <div style="font-size: 0.85rem; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 10px;">
-                                        <div style="display:flex; justify-content:space-between;">
-                                            <span>${e.date}</span>
-                                            <span>MYR ${parseFloat(e.amount).toFixed(2)}</span>
-                                        </div>
-                                        <div style="font-size: 0.75rem; color: var(--text-dim);">${e.odometer ? e.odometer + ' km' : ''} ${e.warranty ? ' | 🛡️ ' + e.warranty : ''}</div>
-                                        ${e.remarks ? `<div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px; font-style: italic;">"${e.remarks}"</div>` : ''}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-    }).join('')}
-                ${Object.keys(groups).length === 0 ? '<p style="text-align:center;">No data to analyze yet.</p>' : ''}
+                ${listHtml(getFilteredGroups())}
             </div>
         </div>
     `;
