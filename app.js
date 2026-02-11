@@ -18,20 +18,43 @@ const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
 /* Configuration & Constants */
-const CATEGORIES = [
-    "Compressor", "Condenser", "Receiver-Drier / Accumulator",
-    "Expansion Valve / Orifice Tube", "Evaporator", "Air Filter",
-    "Coolant", "Radiator Flush", "Fan Belt", "Blower Fan",
-    "Battery", "Alternator", "Absorber Front", "Absorber Rear",
-    "Lower Arm", "Strut Damper", "Absorber Mounting",
-    "Bearing Mounting", "Absorber Bush", "ABS Link",
-    "Tie Rod Ends", "Steering Rack", "Tire Replacement",
-    "Spark Plug", "Oil Filter", "Timing Oil Seal",
-    "Valve Cover Gasket", "Transmission Overhaul", "Transmission Fluid",
-    "Brake Pad (Front)", "Brake Pad (Rear)", "Brake Fluid",
-    "Engine Mounting", "Power Steering Fluid", "Drive Shaft (Right)", "Drive Shaft (Left)",
-    "Tint: Windscreen", "Tint: Left Front", "Tint: Right Front", "Tint: Left Rear", "Tint: Rear Rear", "Tint: Back"
-].sort();
+const CATEGORIES = {
+    "1️⃣ Engine System (Gasoline)": {
+        "🔹 Core Engine Components": ["Engine block", "Cylinder head", "Combustion chamber", "Pistons", "Piston rings", "Connecting rods", "Crankshaft", "Camshaft(s)", "Timing chain / timing belt", "Timing sprockets / gears", "Flywheel / Flexplate", "Engine bearings (main, rod)", "Oil pan", "Engine mounts"],
+        "🔹 Valve Train": ["Intake valves", "Exhaust valves", "Valve springs", "Valve retainers", "Rocker arms", "Lifters / tappets", "Push rods (if OHV engine)", "Variable Valve Timing (VVT) actuator"],
+        "🔹 Fuel System (Gasoline)": ["Fuel tank", "Fuel pump (in-tank)", "Fuel filter", "Fuel lines", "Fuel rail", "Fuel pressure regulator", "Fuel injectors", "Throttle body", "Accelerator pedal (electronic module)"],
+        "🔹 Ignition System": ["Spark plugs", "Ignition coils", "Distributor (older vehicles)", "Crankshaft position sensor", "Camshaft position sensor"],
+        "🔹 Air Intake System": ["Air filter", "Air filter housing", "Mass Air Flow (MAF) sensor", "Manifold Absolute Pressure (MAP) sensor", "Intake manifold", "Throttle position sensor (TPS)", "Idle air control valve (older vehicles)"],
+        "🔹 Exhaust System": ["Exhaust manifold", "Catalytic converter", "Oxygen sensor (O2 sensor)", "Exhaust pipe", "Resonator", "Muffler", "Tailpipe"]
+    },
+    "2️⃣ Cooling System": ["Radiator", "Radiator cap", "Coolant reservoir tank", "Water pump", "Thermostat", "Cooling fan", "Fan motor", "Fan clutch", "Radiator hoses", "Heater core", "Temperature sensor"],
+    "3️⃣ Lubrication System": ["Engine oil", "Oil pump", "Oil filter", "Oil pressure sensor", "Oil cooler", "PCV valve"],
+    "4️⃣ Transmission System": {
+        "🔹 Automatic Transmission": ["Torque converter", "Valve body", "Transmission control module (TCM)", "Transmission fluid pump", "Clutch packs", "Planetary gear set", "Transmission filter"],
+        "🔹 Manual Transmission": ["Clutch disc", "Pressure plate", "Release bearing", "Master cylinder (clutch)", "Slave cylinder", "Gear shifter linkage"],
+        "🔹 Drivetrain": ["Drive shaft", "CV joints", "Axles", "Differential", "Transfer case (AWD/4WD)"]
+    },
+    "5️⃣ Suspension System": {
+        "🔹 Front Suspension": ["Shock absorbers / struts", "Coil springs", "Control arms (upper/lower)", "Ball joints", "Stabilizer bar (anti-roll bar)", "Stabilizer links", "Bushings", "Knuckle"],
+        "🔹 Rear Suspension": ["Shock absorbers", "Coil springs / leaf springs", "Trailing arms", "Control arms", "Rear axle beam (if applicable)"]
+    },
+    "6️⃣ Steering System": ["Steering wheel", "Steering column", "Steering rack", "Tie rods (inner & outer)", "Power steering pump (hydraulic)", "Electric power steering motor (EPS)", "Steering angle sensor"],
+    "7️⃣ Brake System": {
+        "🔹 Hydraulic Components": ["Brake master cylinder", "Brake booster", "Brake fluid reservoir", "Brake lines", "ABS module", "Brake calipers", "Wheel cylinders"],
+        "🔹 Friction Components": ["Brake pads", "Brake shoes", "Brake discs (rotors)", "Brake drums"],
+        "🔹 Parking Brake": ["Handbrake lever", "Parking brake cable", "Electronic parking brake motor"]
+    },
+    "8️⃣ Electrical System": {
+        "🔹 Power Supply": ["Battery", "Alternator", "Starter motor", "Fuse box", "Relays", "Wiring harness"],
+        "🔹 Sensors & Modules": ["ECU (Engine Control Unit)", "BCM (Body Control Module)", "TCM", "ABS module", "Airbag control module", "Various sensors (speed, temperature, pressure, knock, etc.)"]
+    },
+    "9️⃣ Air Conditioning (HVAC System)": ["Compressor", "Condenser", "Evaporator", "Expansion valve", "Receiver dryer", "Blower motor", "Cabin air filter", "HVAC control panel", "AC pressure sensor", "AC clutch"],
+    "🔟 Body & Exterior": ["Hood", "Doors", "Door hinges", "Door locks", "Side mirrors", "Windshield", "Windows", "Wiper motor", "Wiper blades", "Washer pump", "Headlights", "Taillights", "Fog lights", "Bumpers", "Grille", "Roof rails"],
+    "1️⃣1️⃣ Interior Components": ["Dashboard", "Instrument cluster", "Seats", "Seat belts", "Airbags", "Center console", "Infotainment system", "Speakers", "Power window motor", "Window regulator", "Interior lighting"],
+    "1️⃣2️⃣ Wheels & Tires": ["Tires", "Rims", "Wheel hub", "Wheel bearings", "Lug nuts", "Tire pressure sensor (TPMS)"],
+    "1️⃣3️⃣ Safety Systems": ["ABS", "Traction control", "Stability control", "Airbags", "ADAS sensors (camera, radar)", "Reverse camera", "Parking sensors"],
+    "1️⃣4️⃣ Emission Control System": ["EGR valve", "EVAP canister", "Purge valve", "PCV valve", "Catalytic converter", "O2 sensors"]
+};
 
 /* State Management */
 let state = {
@@ -39,7 +62,8 @@ let state = {
     vehicles: [],
     expenses: [],
     activeVehicleId: null,
-    currentView: 'dashboard'
+    currentView: 'dashboard',
+    editingExpenseId: null
 };
 
 /* Auth Handlers */
@@ -137,7 +161,7 @@ function render() {
 
         switch (state.currentView) {
             case 'dashboard': renderDashboard(viewContainer); break;
-            case 'add-expense': renderAddExpense(viewContainer); break;
+            case 'add-expense': renderAddExpense(viewContainer, '', state.editingExpenseId); break;
             case 'history': renderHistory(viewContainer); break;
             case 'insights': renderInsights(viewContainer); break;
             case 'vehicles': renderGarage(viewContainer); break;
@@ -188,6 +212,9 @@ function renderDashboard(container) {
     const records = state.expenses.filter(e => e.vehicleId === state.activeVehicleId);
     const total = records.reduce((s, e) => s + parseFloat(e.amount || 0), 0);
 
+    // Common categories for quick entry
+    const quickCats = ["Engine oil", "Oil filter", "Brake pads", "Tires", "Battery", "Air filter", "Coolant", "Spark plugs"];
+
     container.innerHTML = `
         <div class="dashboard-view">
             <div class="glass-card stat-card full-width">
@@ -196,7 +223,7 @@ function renderDashboard(container) {
             </div>
             <div class="section-title"><h3>Quick Entry</h3></div>
             <div class="category-grid">
-                ${CATEGORIES.slice(0, 8).map(cat => `
+                ${quickCats.map(cat => `
                     <button class="glass-card cat-btn" onclick="window.logCategory('${cat}')">
                         <span class="btn-label">${cat}</span>
                     </button>
@@ -206,42 +233,80 @@ function renderDashboard(container) {
     `;
 }
 
-function renderAddExpense(container, preCat = '') {
+function renderAddExpense(container, preCat = '', expenseId = null) {
+    const expense = expenseId ? state.expenses.find(e => e.id === expenseId) : null;
+    const isEdit = !!expense;
+
+    const renderOptions = () => {
+        let html = '';
+        for (const [mainCat, sub] of Object.entries(CATEGORIES)) {
+            if (Array.isArray(sub)) {
+                html += `<optgroup label="${mainCat}">`;
+                sub.forEach(item => {
+                    html += `<option value="${item}" ${item === (expense?.category || preCat) ? 'selected' : ''}>${item}</option>`;
+                });
+                html += `</optgroup>`;
+            } else {
+                for (const [subCat, items] of Object.entries(sub)) {
+                    html += `<optgroup label="${mainCat} > ${subCat}">`;
+                    items.forEach(item => {
+                        html += `<option value="${item}" ${item === (expense?.category || preCat) ? 'selected' : ''}>${item}</option>`;
+                    });
+                    html += `</optgroup>`;
+                }
+            }
+        }
+        return html;
+    };
+
     container.innerHTML = `
         <div class="log-view">
-            <h3>Record New Service</h3>
+            <h3>${isEdit ? 'Edit Service Record' : 'Record New Service'}</h3>
             <div class="glass-card">
+                <input type="hidden" id="exp-id" value="${expenseId || ''}">
                 <div class="form-group">
                     <label>Category</label>
                     <select id="exp-cat">
-                        ${CATEGORIES.map(c => `<option value="${c}" ${c === preCat ? 'selected' : ''}>${c}</option>`).join('')}
+                        ${renderOptions()}
                     </select>
                 </div>
-                <div class="form-group"><label>Amount (MYR)</label><input type="number" id="exp-amount" placeholder="0.00"></div>
-                <div class="form-group"><label>Date</label><input type="date" id="exp-date" value="${new Date().toISOString().split('T')[0]}"></div>
+                <div class="form-group"><label>Amount (MYR)</label><input type="number" id="exp-amount" placeholder="0.00" value="${expense?.amount || ''}"></div>
+                <div class="form-group"><label>Date</label><input type="date" id="exp-date" value="${expense?.date || new Date().toISOString().split('T')[0]}"></div>
                 <div class="form-group">
                     <label>Odometer (km)</label>
-                    <input type="number" id="exp-odo" placeholder="123456">
+                    <input type="number" id="exp-odo" placeholder="123456" value="${expense?.odometer || ''}">
                 </div>
                 <div class="form-group">
                     <label>Warranty</label>
                     <select id="exp-warranty">
-                        <option value="">No Warranty</option>
-                        <option value="3 Months">3 Months</option>
-                        <option value="6 Months">6 Months</option>
-                        <option value="12 Months">12 Months (1 Year)</option>
-                        <option value="24 Months">24 Months (2 Years)</option>
+                        <option value="" ${!expense?.warranty ? 'selected' : ''}>No Warranty</option>
+                        <option value="3 Months" ${expense?.warranty === '3 Months' ? 'selected' : ''}>3 Months</option>
+                        <option value="6 Months" ${expense?.warranty === '6 Months' ? 'selected' : ''}>6 Months</option>
+                        <option value="12 Months" ${expense?.warranty === '12 Months' ? 'selected' : ''}>12 Months (1 Year)</option>
+                        <option value="24 Months" ${expense?.warranty === '24 Months' ? 'selected' : ''}>24 Months (2 Years)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Remarks</label>
-                    <textarea id="exp-remarks" placeholder="Notes (brand, parts used, etc.)" style="width:100%; min-height:80px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;"></textarea>
+                    <label>Remarks (Max 150 chars)</label>
+                    <textarea id="exp-remarks" placeholder="Notes (brand, parts used, etc.)" maxlength="150" style="width:100%; min-height:80px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">${expense?.remarks || ''}</textarea>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); text-align: right; margin-top: 4px;" id="remarks-counter">0/150</div>
                 </div>
                 <div class="form-group"><label>Invoice Image</label><input type="file" id="exp-file" accept="image/*"></div>
-                <button class="btn-primary" onclick="window.saveExpense()">Save to Cloud</button>
+                <button class="btn-primary" onclick="window.saveExpense()">${isEdit ? 'Update Record' : 'Save to Cloud'}</button>
+                ${isEdit ? `<button class="btn-secondary" onclick="window.switchView('history')" style="width: 100%; margin-top: 10px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">Cancel</button>` : ''}
             </div>
         </div>
     `;
+
+    // Add character counter behavior
+    const remarks = document.getElementById('exp-remarks');
+    const counter = document.getElementById('remarks-counter');
+    if (remarks && counter) {
+        counter.innerText = `${remarks.value.length}/150`;
+        remarks.addEventListener('input', () => {
+            counter.innerText = `${remarks.value.length}/150`;
+        });
+    }
 }
 
 function renderHistory(container) {
@@ -266,6 +331,7 @@ function renderHistory(container) {
                         </div>
                         <div style="display: flex; gap: 10px; margin-top: 15px;">
                             ${e.file ? `<button class="btn-view" onclick="window.viewFile('${e.file}')" style="flex: 1;">Invoice</button>` : ''}
+                            <button class="btn-edit" onclick="window.editExpense('${e.id}')" style="flex: 1; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 12px; border-radius: 8px; cursor: pointer;">Edit</button>
                             <button onclick="window.deleteExpense('${e.id}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px 12px; border-radius: 8px; cursor: pointer;">Delete</button>
                         </div>
                     </div>
@@ -300,6 +366,7 @@ function renderInsights(container) {
                                             <span>MYR ${parseFloat(e.amount).toFixed(2)}</span>
                                         </div>
                                         <div style="font-size: 0.75rem; color: var(--text-dim);">${e.odometer ? e.odometer + ' km' : ''} ${e.warranty ? ' | 🛡️ ' + e.warranty : ''}</div>
+                                        ${e.remarks ? `<div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px; font-style: italic;">"${e.remarks}"</div>` : ''}
                                     </div>
                                 `).join('')}
                             </div>
@@ -337,8 +404,24 @@ function renderGarage(container) {
 }
 
 /* Action Handlers */
-window.switchView = (view) => { state.currentView = view; render(); };
-window.logCategory = (cat) => { state.currentView = 'add-expense'; render(); renderAddExpense(document.getElementById('view-container'), cat); };
+window.switchView = (view) => {
+    state.editingExpenseId = null;
+    state.currentView = view;
+    render();
+};
+
+window.logCategory = (cat) => {
+    state.editingExpenseId = null;
+    state.currentView = 'add-expense';
+    render();
+    renderAddExpense(document.getElementById('view-container'), cat);
+};
+
+window.editExpense = (id) => {
+    state.editingExpenseId = id;
+    state.currentView = 'add-expense';
+    render();
+};
 
 window.addVehicle = async () => {
     const name = document.getElementById('v-name')?.value;
@@ -370,25 +453,37 @@ window.deleteExpense = async (id) => {
 };
 
 window.saveExpense = async () => {
+    const id = document.getElementById('exp-id')?.value;
     const amount = document.getElementById('exp-amount')?.value;
     const date = document.getElementById('exp-date')?.value;
     const category = document.getElementById('exp-cat')?.value;
+    const remarks = document.getElementById('exp-remarks')?.value || '';
+
     if (!amount || !date) return alert('Required fields missing');
+    if (remarks.length > 150) return alert('Remarks cannot exceed 150 characters');
 
     const fileEl = document.getElementById('exp-file');
-    const file = (fileEl && fileEl.files[0]) ? await toBase64(fileEl.files[0]) : null;
+    let file = (fileEl && fileEl.files[0]) ? await toBase64(fileEl.files[0]) : null;
 
-    state.expenses.push({
-        id: Date.now().toString(),
+    const expenseData = {
+        id: id || Date.now().toString(),
         vehicleId: state.activeVehicleId,
         category, amount, date,
         odometer: document.getElementById('exp-odo')?.value || '',
         warranty: document.getElementById('exp-warranty')?.value || '',
-        remarks: document.getElementById('exp-remarks')?.value || '',
-        file
-    });
+        remarks,
+        file: file || (id ? state.expenses.find(e => e.id === id)?.file : null)
+    };
 
-    state.currentView = 'dashboard';
+    if (id) {
+        const index = state.expenses.findIndex(e => e.id === id);
+        if (index !== -1) state.expenses[index] = expenseData;
+    } else {
+        state.expenses.push(expenseData);
+    }
+
+    state.editingExpenseId = null;
+    state.currentView = 'history';
     await saveStateToCloud();
     render();
 };
