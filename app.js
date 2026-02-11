@@ -19,7 +19,7 @@ const googleProvider = new GoogleAuthProvider();
 
 /* Configuration & Constants */
 const CATEGORIES = {
-    "1️⃣ Engine System (Gasoline)": {
+    "🚀 Engine System": {
         "🔹 Core Engine Components": ["Engine block", "Cylinder head", "Combustion chamber", "Pistons", "Piston rings", "Connecting rods", "Crankshaft", "Camshaft(s)", "Timing chain / timing belt", "Timing sprockets / gears", "Flywheel / Flexplate", "Engine bearings (main, rod)", "Oil pan", "Engine mounts"],
         "🔹 Valve Train": ["Intake valves", "Exhaust valves", "Valve springs", "Valve retainers", "Rocker arms", "Lifters / tappets", "Push rods (if OHV engine)", "Variable Valve Timing (VVT) actuator"],
         "🔹 Fuel System (Gasoline)": ["Fuel tank", "Fuel pump (in-tank)", "Fuel filter", "Fuel lines", "Fuel rail", "Fuel pressure regulator", "Fuel injectors", "Throttle body", "Accelerator pedal (electronic module)"],
@@ -27,33 +27,33 @@ const CATEGORIES = {
         "🔹 Air Intake System": ["Air filter", "Air filter housing", "Mass Air Flow (MAF) sensor", "Manifold Absolute Pressure (MAP) sensor", "Intake manifold", "Throttle position sensor (TPS)", "Idle air control valve (older vehicles)"],
         "🔹 Exhaust System": ["Exhaust manifold", "Catalytic converter", "Oxygen sensor (O2 sensor)", "Exhaust pipe", "Resonator", "Muffler", "Tailpipe"]
     },
-    "2️⃣ Cooling System": ["Radiator", "Radiator cap", "Coolant reservoir tank", "Water pump", "Thermostat", "Cooling fan", "Fan motor", "Fan clutch", "Radiator hoses", "Heater core", "Temperature sensor"],
-    "3️⃣ Lubrication System": ["Engine oil", "Oil pump", "Oil filter", "Oil pressure sensor", "Oil cooler", "PCV valve"],
-    "4️⃣ Transmission System": {
+    "❄️ Cooling System": ["Radiator", "Radiator cap", "Coolant reservoir tank", "Water pump", "Thermostat", "Cooling fan", "Fan motor", "Fan clutch", "Radiator hoses", "Heater core", "Temperature sensor"],
+    "🛢️ Lubrication System": ["Engine oil", "Oil pump", "Oil filter", "Oil pressure sensor", "Oil cooler", "PCV valve"],
+    "⚙️ Transmission System": {
         "🔹 Automatic Transmission": ["Torque converter", "Valve body", "Transmission control module (TCM)", "Transmission fluid pump", "Clutch packs", "Planetary gear set", "Transmission filter"],
         "🔹 Manual Transmission": ["Clutch disc", "Pressure plate", "Release bearing", "Master cylinder (clutch)", "Slave cylinder", "Gear shifter linkage"],
         "🔹 Drivetrain": ["Drive shaft", "CV joints", "Axles", "Differential", "Transfer case (AWD/4WD)"]
     },
-    "5️⃣ Suspension System": {
+    "⛓️ Suspension System": {
         "🔹 Front Suspension": ["Shock absorbers / struts", "Coil springs", "Control arms (upper/lower)", "Ball joints", "Stabilizer bar (anti-roll bar)", "Stabilizer links", "Bushings", "Knuckle"],
         "🔹 Rear Suspension": ["Shock absorbers", "Coil springs / leaf springs", "Trailing arms", "Control arms", "Rear axle beam (if applicable)"]
     },
-    "6️⃣ Steering System": ["Steering wheel", "Steering column", "Steering rack", "Tie rods (inner & outer)", "Power steering pump (hydraulic)", "Electric power steering motor (EPS)", "Steering angle sensor"],
-    "7️⃣ Brake System": {
+    "🎡 Steering System": ["Steering wheel", "Steering column", "Steering rack", "Tie rods (inner & outer)", "Power steering pump (hydraulic)", "Electric power steering motor (EPS)", "Steering angle sensor"],
+    "🛑 Brake System": {
         "🔹 Hydraulic Components": ["Brake master cylinder", "Brake booster", "Brake fluid reservoir", "Brake lines", "ABS module", "Brake calipers", "Wheel cylinders"],
         "🔹 Friction Components": ["Brake pads", "Brake shoes", "Brake discs (rotors)", "Brake drums"],
         "🔹 Parking Brake": ["Handbrake lever", "Parking brake cable", "Electronic parking brake motor"]
     },
-    "8️⃣ Electrical System": {
+    "⚡ Electrical System": {
         "🔹 Power Supply": ["Battery", "Alternator", "Starter motor", "Fuse box", "Relays", "Wiring harness"],
         "🔹 Sensors & Modules": ["ECU (Engine Control Unit)", "BCM (Body Control Module)", "TCM", "ABS module", "Airbag control module", "Various sensors (speed, temperature, pressure, knock, etc.)"]
     },
-    "9️⃣ Air Conditioning (HVAC System)": ["Compressor", "Condenser", "Evaporator", "Expansion valve", "Receiver dryer", "Blower motor", "Cabin air filter", "HVAC control panel", "AC pressure sensor", "AC clutch"],
-    "🔟 Body & Exterior": ["Hood", "Doors", "Door hinges", "Door locks", "Side mirrors", "Windshield", "Windows", "Wiper motor", "Wiper blades", "Washer pump", "Headlights", "Taillights", "Fog lights", "Bumpers", "Grille", "Roof rails"],
-    "1️⃣1️⃣ Interior Components": ["Dashboard", "Instrument cluster", "Seats", "Seat belts", "Airbags", "Center console", "Infotainment system", "Speakers", "Power window motor", "Window regulator", "Interior lighting"],
-    "1️⃣2️⃣ Wheels & Tires": ["Tires", "Rims", "Wheel hub", "Wheel bearings", "Lug nuts", "Tire pressure sensor (TPMS)"],
-    "1️⃣3️⃣ Safety Systems": ["ABS", "Traction control", "Stability control", "Airbags", "ADAS sensors (camera, radar)", "Reverse camera", "Parking sensors"],
-    "1️⃣4️⃣ Emission Control System": ["EGR valve", "EVAP canister", "Purge valve", "PCV valve", "Catalytic converter", "O2 sensors"]
+    "🌬️ AC & HVAC": ["Compressor", "Condenser", "Evaporator", "Expansion valve", "Receiver dryer", "Blower motor", "Cabin air filter", "HVAC control panel", "AC pressure sensor", "AC clutch"],
+    "🚙 Body & Exterior": ["Hood", "Doors", "Door hinges", "Door locks", "Side mirrors", "Windshield", "Windows", "Wiper motor", "Wiper blades", "Washer pump", "Headlights", "Taillights", "Fog lights", "Bumpers", "Grille", "Roof rails"],
+    "💺 Interior": ["Dashboard", "Instrument cluster", "Seats", "Seat belts", "Airbags", "Center console", "Infotainment system", "Speakers", "Power window motor", "Window regulator", "Interior lighting"],
+    "🛞 Wheels & Tires": ["Tires", "Rims", "Wheel hub", "Wheel bearings", "Lug nuts", "Tire pressure sensor (TPMS)"],
+    "🛡️ Safety Systems": ["ABS", "Traction control", "Stability control", "Airbags", "ADAS sensors (camera, radar)", "Reverse camera", "Parking sensors"],
+    "☁️ Emission Control": ["EGR valve", "EVAP canister", "Purge valve", "PCV valve", "Catalytic converter", "O2 sensors"]
 };
 
 /* State Management */
@@ -213,7 +213,16 @@ function renderDashboard(container) {
     const total = records.reduce((s, e) => s + parseFloat(e.amount || 0), 0);
 
     // Common categories for quick entry
-    const quickCats = ["Engine oil", "Oil filter", "Brake pads", "Tires", "Battery", "Air filter", "Coolant", "Spark plugs"];
+    const quickCats = [
+        { name: "Engine oil", emoji: "🛢️" },
+        { name: "Oil filter", emoji: "🔍" },
+        { name: "Brake pads", emoji: "🛑" },
+        { name: "Tires", emoji: "🛞" },
+        { name: "Battery", emoji: "⚡" },
+        { name: "Air filter", emoji: "🌬️" },
+        { name: "Coolant", emoji: "❄️" },
+        { name: "Spark plugs", emoji: "🚀" }
+    ];
 
     container.innerHTML = `
         <div class="dashboard-view">
@@ -224,8 +233,9 @@ function renderDashboard(container) {
             <div class="section-title"><h3>Quick Entry</h3></div>
             <div class="category-grid">
                 ${quickCats.map(cat => `
-                    <button class="glass-card cat-btn" onclick="window.logCategory('${cat}')">
-                        <span class="btn-label">${cat}</span>
+                    <button class="glass-card cat-btn" onclick="window.logCategory('${cat.name}')">
+                        <span style="font-size: 1.5rem; margin-bottom: 5px;">${cat.emoji}</span>
+                        <span class="btn-label">${cat.name}</span>
                     </button>
                 `).join('')}
             </div>

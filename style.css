@@ -51,8 +51,16 @@ body {
 }
 
 option {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    padding: 12px;
+}
+
+optgroup {
+    background-color: #1e293b;
+    color: var(--accent);
+    font-weight: bold;
+    font-style: normal;
 }
 
 .lock-screen {
