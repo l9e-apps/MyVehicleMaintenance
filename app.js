@@ -20,28 +20,28 @@ const googleProvider = new GoogleAuthProvider();
 /* Configuration & Constants */
 const CATEGORIES = {
     "🚀 Engine System": {
-        "🔹 Core Engine Components": ["Engine block", "Cylinder head", "Combustion chamber", "Pistons", "Piston rings", "Connecting rods", "Crankshaft", "Camshaft(s)", "Timing chain / timing belt", "Timing sprockets / gears", "Flywheel / Flexplate", "Engine bearings (main, rod)", "Oil pan", "Engine mounts"],
+        "🔹 Core Engine Components": ["Engine block", "Cylinder head", "Combustion chamber", "Pistons", "Piston rings", "Connecting rods", "Crankshaft", "Camshaft(s)", "Timing chain / timing belt", "Timing sprockets / gears", "Flywheel / Flexplate", "Engine bearings (main, rod)", "Oil pan", "Engine mountings"],
         "🔹 Valve Train": ["Intake valves", "Exhaust valves", "Valve springs", "Valve retainers", "Rocker arms", "Lifters / tappets", "Push rods (if OHV engine)", "Variable Valve Timing (VVT) actuator"],
         "🔹 Fuel System (Gasoline)": ["Fuel tank", "Fuel pump (in-tank)", "Fuel filter", "Fuel lines", "Fuel rail", "Fuel pressure regulator", "Fuel injectors", "Throttle body", "Accelerator pedal (electronic module)"],
         "🔹 Ignition System": ["Spark plugs", "Ignition coils", "Distributor (older vehicles)", "Crankshaft position sensor", "Camshaft position sensor"],
         "🔹 Air Intake System": ["Air filter", "Air filter housing", "Mass Air Flow (MAF) sensor", "Manifold Absolute Pressure (MAP) sensor", "Intake manifold", "Throttle position sensor (TPS)", "Idle air control valve (older vehicles)"],
         "🔹 Exhaust System": ["Exhaust manifold", "Catalytic converter", "Oxygen sensor (O2 sensor)", "Exhaust pipe", "Resonator", "Muffler", "Tailpipe"]
     },
-    "❄️ Cooling System": ["Radiator", "Radiator cap", "Coolant reservoir tank", "Water pump", "Thermostat", "Cooling fan", "Fan motor", "Fan clutch", "Radiator hoses", "Heater core", "Temperature sensor"],
-    "🛢️ Lubrication System": ["Engine oil", "Oil pump", "Oil filter", "Oil pressure sensor", "Oil cooler", "PCV valve"],
+    "❄️ Cooling System": ["Radiator", "Radiator cap", "Coolant reservoir tank", "Water pump", "Thermostat", "Cooling fan", "Fan motor", "Fan clutch", "Radiator hoses", "Heater core", "Temperature sensor", "Fan belt"],
+    "🛢️ Lubrication System": ["Engine oil", "Oil pump", "Oil filter", "Oil pressure sensor", "Oil cooler", "PCV valve", "Timing oil seal"],
     "⚙️ Transmission System": {
         "🔹 Automatic Transmission": ["Torque converter", "Valve body", "Transmission control module (TCM)", "Transmission fluid pump", "Clutch packs", "Planetary gear set", "Transmission filter"],
         "🔹 Manual Transmission": ["Clutch disc", "Pressure plate", "Release bearing", "Master cylinder (clutch)", "Slave cylinder", "Gear shifter linkage"],
-        "🔹 Drivetrain": ["Drive shaft", "CV joints", "Axles", "Differential", "Transfer case (AWD/4WD)"]
+        "🔹 Drivetrain": ["Drive shaft", "CV joints", "Axles", "Differential", "Transfer case (AWD/4WD)", "Transmission fluid"]
     },
     "⛓️ Suspension System": {
-        "🔹 Front Suspension": ["Shock absorbers / struts", "Coil springs", "Control arms (upper/lower)", "Ball joints", "Stabilizer bar (anti-roll bar)", "Stabilizer links", "Bushings", "Knuckle"],
-        "🔹 Rear Suspension": ["Shock absorbers", "Coil springs / leaf springs", "Trailing arms", "Control arms", "Rear axle beam (if applicable)"]
+        "🔹 Front Suspension": ["Absorber Front", "Coil Spring Front", "Control arms (upper/lower)", "Ball joints", "Stabilizer bar (anti-roll bar)", "Stabilizer links", "Bushings", "Knuckle", "Absorber Bush Front", "Strut Damper Front", "Bearing Mounting Front"],
+        "🔹 Rear Suspension": ["Absorber Rear", "Coil Spring Rear / leaf springs", "Trailing arms", "Control arms", "Rear axle beam (if applicable)", "Absorber Bush Rear", "Strut Damper Rear", "Bearing Mounting Rear"]
     },
     "🎡 Steering System": ["Steering wheel", "Steering column", "Steering rack", "Tie rods (inner & outer)", "Power steering pump (hydraulic)", "Electric power steering motor (EPS)", "Steering angle sensor"],
     "🛑 Brake System": {
-        "🔹 Hydraulic Components": ["Brake master cylinder", "Brake booster", "Brake fluid reservoir", "Brake lines", "ABS module", "Brake calipers", "Wheel cylinders"],
-        "🔹 Friction Components": ["Brake pads", "Brake shoes", "Brake discs (rotors)", "Brake drums"],
+        "🔹 Hydraulic Components": ["Brake master cylinder", "Brake booster", "Brake fluid reservoir", "Brake lines", "ABS module", "Brake calipers", "Wheel cylinders", "Brake fluid"],
+        "🔹 Friction Components": ["Brake Pad Front", "Brake Pad Rear", "Brake shoes", "Brake discs (rotors)", "Brake drums"],
         "🔹 Parking Brake": ["Handbrake lever", "Parking brake cable", "Electronic parking brake motor"]
     },
     "⚡ Electrical System": {
@@ -53,7 +53,9 @@ const CATEGORIES = {
     "💺 Interior": ["Dashboard", "Instrument cluster", "Seats", "Seat belts", "Airbags", "Center console", "Infotainment system", "Speakers", "Power window motor", "Window regulator", "Interior lighting"],
     "🛞 Wheels & Tires": ["Tires", "Rims", "Wheel hub", "Wheel bearings", "Lug nuts", "Tire pressure sensor (TPMS)"],
     "🛡️ Safety Systems": ["ABS", "Traction control", "Stability control", "Airbags", "ADAS sensors (camera, radar)", "Reverse camera", "Parking sensors"],
-    "☁️ Emission Control": ["EGR valve", "EVAP canister", "Purge valve", "PCV valve", "Catalytic converter", "O2 sensors"]
+    "☁️ Emission Control": ["EGR valve", "EVAP canister", "Purge valve", "PCV valve", "Catalytic converter", "O2 sensors"],
+    "🎨 Tint": ["Tint Windscreen", "Tint Right Front Window", "Tint Left Front Window", "Tint Right Rear Window", "Tint Left Rear Window", "Tint Rear Windscreen"],
+    "✍️ Custom": ["Others (Describe in Remarks)"]
 };
 
 /* State Management */
@@ -63,7 +65,9 @@ let state = {
     expenses: [],
     activeVehicleId: null,
     currentView: 'dashboard',
-    editingExpenseId: null
+    editingExpenseId: null,
+    historySearch: '',
+    insightsSearch: ''
 };
 
 /* Auth Handlers */
@@ -246,27 +250,20 @@ function renderDashboard(container) {
 function renderAddExpense(container, preCat = '', expenseId = null) {
     const expense = expenseId ? state.expenses.find(e => e.id === expenseId) : null;
     const isEdit = !!expense;
+    let selectedCategory = expense?.category || preCat || '';
 
-    const renderOptions = () => {
-        let html = '';
-        for (const [mainCat, sub] of Object.entries(CATEGORIES)) {
+    const getAllCategories = () => {
+        const flat = [];
+        for (const [main, sub] of Object.entries(CATEGORIES)) {
             if (Array.isArray(sub)) {
-                html += `<optgroup label="${mainCat}">`;
-                sub.forEach(item => {
-                    html += `<option value="${item}" ${item === (expense?.category || preCat) ? 'selected' : ''}>${item}</option>`;
-                });
-                html += `</optgroup>`;
+                sub.forEach(item => flat.push({ main, sub: '', item }));
             } else {
                 for (const [subCat, items] of Object.entries(sub)) {
-                    html += `<optgroup label="${mainCat} > ${subCat}">`;
-                    items.forEach(item => {
-                        html += `<option value="${item}" ${item === (expense?.category || preCat) ? 'selected' : ''}>${item}</option>`;
-                    });
-                    html += `</optgroup>`;
+                    items.forEach(item => flat.push({ main, sub: subCat, item }));
                 }
             }
         }
-        return html;
+        return flat;
     };
 
     container.innerHTML = `
@@ -274,11 +271,13 @@ function renderAddExpense(container, preCat = '', expenseId = null) {
             <h3>${isEdit ? 'Edit Service Record' : 'Record New Service'}</h3>
             <div class="glass-card">
                 <input type="hidden" id="exp-id" value="${expenseId || ''}">
-                <div class="form-group">
+                <div class="form-group searchable-select-container">
                     <label>Category</label>
-                    <select id="exp-cat">
-                        ${renderOptions()}
-                    </select>
+                    <div class="search-input-wrapper">
+                        <input type="text" id="cat-search" placeholder="Search category..." value="${selectedCategory}">
+                        <div id="cat-results" class="search-results hidden"></div>
+                    </div>
+                    <input type="hidden" id="exp-cat" value="${selectedCategory}">
                 </div>
                 <div class="form-group"><label>Amount (MYR)</label><input type="number" id="exp-amount" placeholder="0.00" value="${expense?.amount || ''}"></div>
                 <div class="form-group"><label>Date</label><input type="date" id="exp-date" value="${expense?.date || new Date().toISOString().split('T')[0]}"></div>
@@ -308,6 +307,47 @@ function renderAddExpense(container, preCat = '', expenseId = null) {
         </div>
     `;
 
+    const catSearch = document.getElementById('cat-search');
+    const catResults = document.getElementById('cat-results');
+    const expCatVal = document.getElementById('exp-cat');
+    const allCats = getAllCategories();
+
+    const updateResults = (query) => {
+        const filtered = allCats.filter(c =>
+            c.item.toLowerCase().includes(query.toLowerCase()) ||
+            c.main.toLowerCase().includes(query.toLowerCase()) ||
+            c.sub.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (filtered.length > 0 && query.length > 0) {
+            catResults.innerHTML = filtered.map(c => `
+                <div class="result-item" onclick="window.selectCategory('${c.item.replace(/'/g, "\\'")}')">
+                    <div class="result-main">${c.item}</div>
+                    <div class="result-path">${c.main} ${c.sub ? '> ' + c.sub : ''}</div>
+                </div>
+            `).join('');
+            catResults.classList.remove('hidden');
+        } else {
+            catResults.classList.add('hidden');
+        }
+    };
+
+    window.selectCategory = (val) => {
+        catSearch.value = val;
+        expCatVal.value = val;
+        catResults.classList.add('hidden');
+    };
+
+    catSearch.addEventListener('input', (e) => updateResults(e.target.value));
+    catSearch.addEventListener('focus', (e) => updateResults(e.target.value));
+
+    // Close results when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-input-wrapper')) {
+            catResults.classList.add('hidden');
+        }
+    });
+
     // Add character counter behavior
     const remarks = document.getElementById('exp-remarks');
     const counter = document.getElementById('remarks-counter');
@@ -322,11 +362,20 @@ function renderAddExpense(container, preCat = '', expenseId = null) {
 function renderHistory(container) {
     const records = state.expenses
         .filter(e => e.vehicleId === state.activeVehicleId)
+        .filter(e => {
+            const s = state.historySearch.toLowerCase();
+            return e.category.toLowerCase().includes(s) || (e.remarks || '').toLowerCase().includes(s);
+        })
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     container.innerHTML = `
         <div class="history-view">
-            <div class="section-header"><h3>Service History</h3></div>
+            <div class="section-header">
+                <h3>Service History</h3>
+                <div class="search-bar" style="margin-top: 10px;">
+                    <input type="text" id="history-search" placeholder="Search history..." value="${state.historySearch}" style="padding: 8px 12px; font-size: 0.9rem;">
+                </div>
+            </div>
             <div class="expense-list">
                 ${records.length === 0 ? '<p style="text-align:center; padding: 2rem;">No records found.</p>' : records.map(e => `
                     <div class="glass-card expense-item">
@@ -349,10 +398,21 @@ function renderHistory(container) {
             </div>
         </div>
     `;
+
+    document.getElementById('history-search').addEventListener('input', (e) => {
+        state.historySearch = e.target.value;
+        renderHistory(container);
+    });
 }
 
 function renderInsights(container) {
-    const records = state.expenses.filter(e => e.vehicleId === state.activeVehicleId);
+    const records = state.expenses
+        .filter(e => e.vehicleId === state.activeVehicleId)
+        .filter(e => {
+            const s = state.insightsSearch.toLowerCase();
+            return e.category.toLowerCase().includes(s) || (e.remarks || '').toLowerCase().includes(s);
+        });
+
     const groups = records.reduce((acc, e) => {
         if (!acc[e.category]) acc[e.category] = [];
         acc[e.category].push(e);
@@ -361,8 +421,13 @@ function renderInsights(container) {
 
     container.innerHTML = `
         <div class="insights-view">
-            <div class="section-header"><h3>Service Insights</h3></div>
-            <div class="insight-grid">
+            <div class="section-header">
+                <h3>Service Insights</h3>
+                <div class="search-bar" style="margin-top: 10px;">
+                    <input type="text" id="insights-search" placeholder="Search insights..." value="${state.insightsSearch}" style="padding: 8px 12px; font-size: 0.9rem;">
+                </div>
+            </div>
+            <div class="insight-grid" style="margin-top: 15px;">
                 ${Object.keys(groups).sort().map(cat => {
         const list = groups[cat].sort((a, b) => new Date(b.date) - new Date(a.date));
         return `
@@ -387,6 +452,11 @@ function renderInsights(container) {
             </div>
         </div>
     `;
+
+    document.getElementById('insights-search').addEventListener('input', (e) => {
+        state.insightsSearch = e.target.value;
+        renderInsights(container);
+    });
 }
 
 function renderGarage(container) {
