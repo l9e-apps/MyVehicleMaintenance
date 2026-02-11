@@ -313,19 +313,37 @@ function renderAddExpense(container, preCat = '', expenseId = null) {
     const allCats = getAllCategories();
 
     const updateResults = (query) => {
-        const filtered = allCats.filter(c =>
-            c.item.toLowerCase().includes(query.toLowerCase()) ||
-            c.main.toLowerCase().includes(query.toLowerCase()) ||
-            c.sub.toLowerCase().includes(query.toLowerCase())
-        );
+        const isSearch = query.length > 0;
+        const filtered = isSearch
+            ? allCats.filter(c =>
+                c.item.toLowerCase().includes(query.toLowerCase()) ||
+                c.main.toLowerCase().includes(query.toLowerCase()) ||
+                c.sub.toLowerCase().includes(query.toLowerCase()))
+            : allCats;
 
-        if (filtered.length > 0 && query.length > 0) {
-            catResults.innerHTML = filtered.map(c => `
-                <div class="result-item" onclick="window.selectCategory('${c.item.replace(/'/g, "\\'")}')">
-                    <div class="result-main">${c.item}</div>
-                    <div class="result-path">${c.main} ${c.sub ? '> ' + c.sub : ''}</div>
-                </div>
-            `).join('');
+        if (filtered.length > 0) {
+            let html = '';
+            let currentMain = '';
+            let currentSub = '';
+
+            filtered.forEach(c => {
+                if (c.main !== currentMain) {
+                    html += `<div class="result-group-header">${c.main}</div>`;
+                    currentMain = c.main;
+                    currentSub = '';
+                }
+                if (c.sub && c.sub !== currentSub) {
+                    html += `<div class="result-subgroup-header">${c.sub}</div>`;
+                    currentSub = c.sub;
+                }
+                html += `
+                    <div class="result-item" onclick="window.selectCategory('${c.item.replace(/'/g, "\\'")}')">
+                        <div class="result-main">${c.item}</div>
+                        ${isSearch ? `<div class="result-path">${c.main} ${c.sub ? '> ' + c.sub : ''}</div>` : ''}
+                    </div>
+                `;
+            });
+            catResults.innerHTML = html;
             catResults.classList.remove('hidden');
         } else {
             catResults.classList.add('hidden');
