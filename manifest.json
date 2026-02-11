@@ -1,0 +1,24 @@
+{
+    "name": "MyVehicle - Personal Vehicle App",
+    "short_name": "MyVehicle",
+    "description": "Premium vehicle maintenance and expense tracker.",
+    "id": "/myrovo/",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#0f1216",
+    "theme_color": "#4f46e5",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

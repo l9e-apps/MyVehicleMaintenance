@@ -1,0 +1,429 @@
+:root {
+    /* Color Palette - Premium Dark Mode */
+    --bg-deep: #0f1216;
+    --bg-card: rgba(25, 30, 38, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+
+    --primary: #4f46e5;
+    --primary-glow: rgba(79, 70, 229, 0.4);
+    --accent: #10b981;
+    --accent-glow: rgba(16, 185, 129, 0.3);
+
+    --text-main: #f3f4f6;
+    --text-dim: #9ca3af;
+    --text-muted: #6b7280;
+
+    --danger: #ef4444;
+    --warning: #f59e0b;
+
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    --rounded-sm: 8px;
+    --rounded-md: 16px;
+    --rounded-lg: 24px;
+    --rounded-pill: 9999px;
+
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Global Reset & Theme */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: var(--bg-deep);
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    color-scheme: dark;
+    /* Helps browser UI match dark theme */
+}
+
+option {
+    background-color: #000;
+    color: #fff;
+}
+
+.lock-screen {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Glassmorphism Utilities */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-md);
+    padding: var(--spacing-md);
+    transition: var(--transition);
+}
+
+.glass-card:active {
+    transform: scale(0.98);
+}
+
+/* Header Styles */
+.glass-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: var(--spacing-md);
+    background: rgba(15, 18, 22, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.brand h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    padding: var(--spacing-sm) 0 calc(var(--spacing-sm) + env(safe-area-inset-bottom));
+    background: rgba(15, 18, 22, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--glass-border);
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    gap: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    flex: 1;
+}
+
+.nav-item .icon {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item .icon img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    transition: var(--transition);
+}
+
+.nav-item.active .icon img {
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+}
+
+.nav-item .label {
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+.nav-item.active .icon {
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+    transform: translateY(-2px);
+}
+
+/* View Container */
+#main-content {
+    padding: var(--spacing-md);
+    padding-bottom: 100px;
+    /* Space for nav */
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+    color: white;
+    border: none;
+    padding: var(--spacing-md);
+    border-radius: var(--rounded-md);
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--primary-glow);
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.btn-primary:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 6px var(--primary-glow);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: var(--spacing-xs);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--rounded-sm);
+    color: var(--text-main);
+    font-size: 1rem;
+    outline: none;
+    font-family: inherit;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+/* Dashboard */
+.dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.stat-card.full-width {
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+.stat-card .label {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+}
+
+.stat-card .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.section-title h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: var(--spacing-sm);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: var(--spacing-sm);
+}
+
+.cat-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-md);
+    aspect-ratio: 1;
+    border: none;
+    color: var(--text-main);
+    font-family: inherit;
+    cursor: pointer;
+    background: var(--bg-card);
+    border-radius: var(--rounded-md);
+    border: 1px solid var(--glass-border);
+}
+
+.cat-btn .cat-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.cat-btn.more {
+    border: 1px dashed var(--glass-border);
+    background: transparent;
+}
+
+/* History */
+.expense-item {
+    margin-bottom: var(--spacing-md);
+}
+
+.expense-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+}
+
+.expense-header .date {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+.expense-header .amount {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.expense-body h4 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.expense-body .odo {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-view {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-dim);
+    padding: var(--spacing-sm);
+    border-radius: var(--rounded-sm);
+    font-size: 0.8rem;
+    margin-top: var(--spacing-sm);
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Garage */
+.vehicle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.vehicle-item.active {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.add-vehicle-form {
+    margin-top: var(--spacing-xl);
+}
+
+.add-vehicle-form h4 {
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.empty-state h2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-dim);
+}
+
+/* Custom Select */
+.glass-select {
+    background: #000;
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 6px 12px;
+    border-radius: var(--rounded-pill);
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .brand h1 {
+        font-size: 1.1rem;
+    }
+
+    .stat-card .value {
+        font-size: 1.5rem;
+    }
+}
