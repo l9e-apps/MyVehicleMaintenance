@@ -105,7 +105,7 @@ optgroup {
     position: sticky;
     top: 0;
     z-index: 100;
-    padding: var(--spacing-md);
+    padding: calc(var(--spacing-md) + env(safe-area-inset-top)) var(--spacing-md) var(--spacing-md);
     background: rgba(15, 18, 22, 0.8);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--glass-border);
