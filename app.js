@@ -48,7 +48,7 @@ const CATEGORIES = {
         "🔹 Power Supply": ["Battery", "Alternator", "Starter motor", "Fuse box", "Relays", "Wiring harness"],
         "🔹 Sensors & Modules": ["ECU (Engine Control Unit)", "BCM (Body Control Module)", "TCM", "ABS module", "Airbag control module", "Various sensors (speed, temperature, pressure, knock, etc.)"]
     },
-    "🌬️ AC & HVAC": ["Compressor", "Condenser", "Evaporator", "Expansion valve", "Receiver dryer", "Blower motor", "Cabin air filter", "HVAC control panel", "AC pressure sensor", "AC clutch"],
+    "🌬️ AC & HVAC": ["Compressor", "Condenser", "Evaporator", "Cooling Coil", "Expansion valve", "Receiver dryer", "Blower motor", "Cabin air filter", "HVAC control panel", "AC pressure sensor", "AC clutch"],
     "🚙 Body & Exterior": ["Hood", "Doors", "Door hinges", "Door locks", "Side mirrors", "Windshield", "Windows", "Wiper motor", "Wiper blades", "Washer pump", "Headlights", "Taillights", "Fog lights", "Bumpers", "Grille", "Roof rails"],
     "💺 Interior": ["Dashboard", "Instrument cluster", "Seats", "Seat belts", "Airbags", "Center console", "Infotainment system", "Speakers", "Power window motor", "Window regulator", "Interior lighting"],
     "🛞 Wheels & Tires": ["Tires", "Rims", "Wheel hub", "Wheel bearings", "Lug nuts", "Tire pressure sensor (TPMS)"],
